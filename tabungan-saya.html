@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabungan Saya - TabungKu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">💰 TabungKu</div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Beranda</span>
+            </a>
+            <a href="tambah-tabungan.html" class="nav-item">
+                <span class="nav-icon">➕</span>
+                <span class="nav-label">Tambah Tabungan</span>
+            </a>
+            <a href="tabungan-saya.html" class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Tabungan Saya</span>
+            </a>
+            <a href="ringkasan.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Ringkasan</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <span id="userName">User</span>
+            </div>
+            <button class="btn btn-logout" onclick="logout()">🚪 Keluar</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1>📋 Tabungan Saya</h1>
+            <p class="subtitle">Kelola dan pantau semua tabunganmu</p>
+        </header>
+
+        <div id="savingsContainer" class="savings-grid">
+            <!-- Savings loaded by JS -->
+        </div>
+
+        <div id="emptySavings" class="empty-state hidden">
+            <div class="empty-icon">📭</div>
+            <h3>Belum Ada Tabungan</h3>
+            <p>Yuk buat tabungan pertamamu sekarang!</p>
+            <a href="tambah-tabungan.html" class="btn btn-primary">Buat Tabungan</a>
+        </div>
+    </main>
+
+    <!-- Modal: Tambah Saldo -->
+    <div id="addBalanceModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>➕ Tambah Saldo</h3>
+                <button class="btn-close" onclick="closeModal('addBalanceModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Jumlah (Rp)</label>
+                    <input type="number" id="addAmount" placeholder="Contoh: 100000" min="1000" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Nabung</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="date" id="addDate" style="flex: 1;" required>
+                        <button type="button" class="btn btn-primary" style="padding: 10px 16px; font-size: 13px; white-space: nowrap;" onclick="setToday('addDate')">📅 Hari Ini</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Catatan (Opsional)</label>
+                    <input type="text" id="addNote" placeholder="Contoh: Uang jajan minggu ini">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addBalanceModal')">Batal</button>
+                <button class="btn btn-success" onclick="confirmAddBalance()">Tambah Saldo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Tarik Saldo -->
+    <div id="withdrawModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>➖ Tarik Saldo</h3>
+                <button class="btn-close" onclick="closeModal('withdrawModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Jumlah (Rp)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Contoh: 50000" min="1000" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Penarikan</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="date" id="withdrawDate" style="flex: 1;" required>
+                        <button type="button" class="btn btn-primary" style="padding: 10px 16px; font-size: 13px; white-space: nowrap;" onclick="setToday('withdrawDate')">📅 Hari Ini</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Catatan (Opsional)</label>
+                    <input type="text" id="withdrawNote" placeholder="Contoh: Keperluan mendesak">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('withdrawModal')">Batal</button>
+                <button class="btn btn-danger" onclick="confirmWithdraw()">Tarik Saldo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Auto Save -->
+    <div id="autoSaveModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>🤖 Tabungan Otomatis</h3>
+                <button class="btn-close" onclick="closeModal('autoSaveModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Jumlah per Periode (Rp)</label>
+                    <input type="number" id="autoSaveAmount" placeholder="Contoh: 10000" min="1000">
+                </div>
+                <div class="form-group">
+                    <label>Frekuensi</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="autoFreq" value="daily">
+                            <span class="radio-label">📅 Harian</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="autoFreq" value="weekly">
+                            <span class="radio-label">📆 Mingguan</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="autoFreq" value="monthly">
+                            <span class="radio-label">🗓️ Bulanan</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="autoSaveActive">
+                        <span>Aktifkan Tabungan Otomatis</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('autoSaveModal')">Batal</button>
+                <button class="btn btn-primary" onclick="saveAutoSave()">Simpan Pengaturan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: History -->
+    <div id="historyModal" class="modal-overlay">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h3>📜 Riwayat Transaksi</h3>
+                <button class="btn-close" onclick="closeModal('historyModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="historyList" class="history-list">
+                    <!-- History loaded by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        (async function() {
+            const isLoggedIn = await checkAuth();
+            if (isLoggedIn) {
+                loadSavingsPage();
+            }
+        })();
+    </script>
+</body>
+
+</html>

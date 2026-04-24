@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - TabungKu</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="logo">💰 TabungKu</div>
+            <h2>Selamat Datang Kembali</h2>
+            <p class="subtitle">Masuk untuk melanjutkan menabung</p>
+
+            <div id="loginError" class="error-msg"></div>
+
+            <form id="loginForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="email@contoh.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="login()">
+                    <span id="loginText">Masuk</span>
+                    <span id="loginLoading" class="loading hidden"></span>
+                </button>
+            </form>
+
+            <div class="auth-switch">
+                Belum punya akun? <a href="register.html">Daftar sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+
+</html>
