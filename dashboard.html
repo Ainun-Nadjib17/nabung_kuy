@@ -10,24 +10,28 @@
 </head>
 
 <body>
+    <!-- Mobile Toggle & Overlay -->
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-logo">💰 TabungKu</div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo"> TabungKu</div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item active">
-                <span class="nav-icon">🏠</span>
+                <span class="nav-icon"></span>
                 <span class="nav-label">Beranda</span>
             </a>
             <a href="tambah-tabungan.html" class="nav-item">
-                <span class="nav-icon">➕</span>
+                <span class="nav-icon"></span>
                 <span class="nav-label">Tambah Tabungan</span>
             </a>
             <a href="tabungan-saya.html" class="nav-item">
-                <span class="nav-icon">📋</span>
+                <span class="nav-icon"></span>
                 <span class="nav-label">Tabungan Saya</span>
             </a>
             <a href="ringkasan.html" class="nav-item">
-                <span class="nav-icon">📊</span>
+                <span class="nav-icon"></span>
                 <span class="nav-label">Ringkasan</span>
             </a>
         </nav>
@@ -49,28 +53,28 @@
         <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-icon">💰</div>
+                <div class="stat-icon"></div>
                 <div class="stat-info">
                     <div class="stat-value" id="totalBalance">Rp 0</div>
                     <div class="stat-label">Total Tabungan</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🎯</div>
+                <div class="stat-icon"></div>
                 <div class="stat-info">
                     <div class="stat-value" id="totalGoals">0</div>
                     <div class="stat-label">Jumlah Target</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">📈</div>
+                <div class="stat-icon"></div>
                 <div class="stat-info">
                     <div class="stat-value" id="progressRate">0%</div>
                     <div class="stat-label">Progress Rata-rata</div>
                 </div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon">🔄</div>
+                <div class="stat-icon"></div>
                 <div class="stat-info">
                     <div class="stat-value" id="recentTransactions">0</div>
                     <div class="stat-label">Transaksi 7 Hari</div>
@@ -80,18 +84,18 @@
 
         <!-- Quick Actions -->
         <div class="card">
-            <h3>⚡ Aksi Cepat</h3>
+            <h3>Aksi Cepat</h3>
             <div class="quick-actions">
                 <a href="tambah-tabungan.html" class="quick-action">
-                    <div class="quick-icon">➕</div>
+                    <div class="quick-icon"></div>
                     <div class="quick-label">Tabungan Baru</div>
                 </a>
                 <a href="tabungan-saya.html" class="quick-action">
-                    <div class="quick-icon">💵</div>
+                    <div class="quick-icon"></div>
                     <div class="quick-label">Tambah Saldo</div>
                 </a>
                 <a href="ringkasan.html" class="quick-action">
-                    <div class="quick-icon">📊</div>
+                    <div class="quick-icon"></div>
                     <div class="quick-label">Lihat Grafik</div>
                 </a>
             </div>
@@ -99,7 +103,7 @@
 
         <!-- Recent Savings -->
         <div class="card">
-            <h3>📋 Tabungan Terbaru</h3>
+            <h3>Tabungan Terbaru</h3>
             <div id="recentSavingsList">
                 <div class="empty-state">
                     <div class="empty-icon">📭</div>
@@ -113,6 +117,40 @@
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
     <script>
+        // Mobile sidebar toggle
+        (function() {
+            const toggle = document.getElementById('mobileToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.classList.add('sidebar-open');
+                toggle.textContent = '✕';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+                toggle.textContent = '☰';
+            }
+
+            toggle.addEventListener('click', function() {
+                sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+            });
+
+            overlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar when clicking a nav item on mobile
+            sidebar.querySelectorAll('.nav-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) closeSidebar();
+                });
+            });
+        })();
+
         (async function() {
             const isLoggedIn = await checkAuth();
             if (isLoggedIn) {
@@ -120,6 +158,7 @@
             }
         })();
     </script>
+
 </body>
 
 </html>
