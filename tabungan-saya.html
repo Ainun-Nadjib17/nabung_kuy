@@ -10,8 +10,12 @@
 </head>
 
 <body>
+    <!-- Mobile Toggle & Overlay -->
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">💰 TabungKu</div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item">
@@ -29,6 +33,10 @@
             <a href="ringkasan.html" class="nav-item">
                 <span class="nav-icon">📊</span>
                 <span class="nav-label">Ringkasan</span>
+            </a>
+            <a href="simulasi.html" class="nav-item">
+                <span class="nav-icon">🧮</span>
+                <span class="nav-label">Simulasi</span>
             </a>
         </nav>
         <div class="sidebar-footer">
@@ -55,6 +63,209 @@
             <h3>Belum Ada Tabungan</h3>
             <p>Yuk buat tabungan pertamamu sekarang!</p>
             <a href="tambah-tabungan.html" class="btn btn-primary">Buat Tabungan</a>
+        </div>
+
+        <!-- Simulation Section (Collapsible) -->
+        <div class="sim-toggle-section">
+            <button class="btn btn-primary sim-toggle-btn" onclick="toggleSimulation()" id="simToggleBtn">
+                🧮 Buka Simulasi Menabung
+            </button>
+        </div>
+
+        <div id="simSection" class="sim-section hidden">
+            <!-- Simulation Form -->
+            <div class="card sim-form-card">
+                <h3>🧮 Simulasi Menabung</h3>
+                <p style="color: var(--gray); font-size: 14px; margin-bottom: 20px;">Hitung berapa lama targetmu bisa tercapai — tanpa mempengaruhi data tabunganmu.</p>
+                <div class="form-group">
+                    <label for="simTarget">🎯 Target Tabungan (Rp)</label>
+                    <input type="number" id="simTarget" placeholder="Contoh: 5000000" min="1000" oninput="runSimulation()">
+                </div>
+
+                <div class="sim-frequency-section">
+                    <h4 class="sim-section-title">💵 Berapa yang kamu tabung?</h4>
+                    <div class="sim-inputs-grid">
+                        <div class="sim-input-card">
+                            <div class="sim-input-icon">☀️</div>
+                            <label for="simDaily">Per Hari</label>
+                            <div class="sim-input-wrapper">
+                                <span class="sim-currency">Rp</span>
+                                <input type="number" id="simDaily" placeholder="0" min="0" oninput="runSimulation()">
+                            </div>
+                        </div>
+                        <div class="sim-input-card">
+                            <div class="sim-input-icon">📅</div>
+                            <label for="simWeekly">Per Minggu</label>
+                            <div class="sim-input-wrapper">
+                                <span class="sim-currency">Rp</span>
+                                <input type="number" id="simWeekly" placeholder="0" min="0" oninput="runSimulation()">
+                            </div>
+                        </div>
+                        <div class="sim-input-card">
+                            <div class="sim-input-icon">🗓️</div>
+                            <label for="simMonthly">Per Bulan</label>
+                            <div class="sim-input-wrapper">
+                                <span class="sim-currency">Rp</span>
+                                <input type="number" id="simMonthly" placeholder="0" min="0" oninput="runSimulation()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="runSimulation()" style="width:100%;">🚀 Hitung Simulasi</button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="simResults" class="sim-results hidden">
+                <div class="card sim-total-card">
+                    <div class="sim-total-header">
+                        <div class="sim-total-icon">💰</div>
+                        <div>
+                            <h3>Total Tabungan Gabungan</h3>
+                            <p class="sim-total-subtitle">Kombinasi harian + mingguan + bulanan</p>
+                        </div>
+                    </div>
+                    <div class="sim-total-value" id="simTotalPerMonth">Rp 0 / bulan</div>
+                    <div class="sim-total-detail" id="simTotalBreakdown"></div>
+                </div>
+
+                <div class="sim-results-grid">
+                    <div class="sim-result-card" id="simDailyResult" style="display:none;">
+                        <div class="sim-result-header gradient-daily">
+                            <div class="sim-result-emoji">☀️</div>
+                            <h4>Menabung Harian</h4>
+                        </div>
+                        <div class="sim-result-body">
+                            <div class="sim-result-amount" id="simDailyAmount">Rp 0 / hari</div>
+                            <div class="sim-result-timeline">
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Tercapai dalam</span>
+                                    <span class="sim-timeline-value" id="simDailyDays">-</span>
+                                </div>
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Setara</span>
+                                    <span class="sim-timeline-value" id="simDailyMonths">-</span>
+                                </div>
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Tanggal tercapai</span>
+                                    <span class="sim-timeline-value sim-date" id="simDailyDate">-</span>
+                                </div>
+                            </div>
+                            <div class="sim-progress-mini">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill sim-progress-animated" id="simDailyProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sim-result-card" id="simWeeklyResult" style="display:none;">
+                        <div class="sim-result-header gradient-weekly">
+                            <div class="sim-result-emoji">📅</div>
+                            <h4>Menabung Mingguan</h4>
+                        </div>
+                        <div class="sim-result-body">
+                            <div class="sim-result-amount" id="simWeeklyAmount">Rp 0 / minggu</div>
+                            <div class="sim-result-timeline">
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Tercapai dalam</span>
+                                    <span class="sim-timeline-value" id="simWeeklyWeeks">-</span>
+                                </div>
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Setara</span>
+                                    <span class="sim-timeline-value" id="simWeeklyMonths">-</span>
+                                </div>
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Tanggal tercapai</span>
+                                    <span class="sim-timeline-value sim-date" id="simWeeklyDate">-</span>
+                                </div>
+                            </div>
+                            <div class="sim-progress-mini">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill sim-progress-animated" id="simWeeklyProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sim-result-card" id="simMonthlyResult" style="display:none;">
+                        <div class="sim-result-header gradient-monthly">
+                            <div class="sim-result-emoji">🗓️</div>
+                            <h4>Menabung Bulanan</h4>
+                        </div>
+                        <div class="sim-result-body">
+                            <div class="sim-result-amount" id="simMonthlyAmount">Rp 0 / bulan</div>
+                            <div class="sim-result-timeline">
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Tercapai dalam</span>
+                                    <span class="sim-timeline-value" id="simMonthlyMonthsCount">-</span>
+                                </div>
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Setara</span>
+                                    <span class="sim-timeline-value" id="simMonthlyYears">-</span>
+                                </div>
+                                <div class="sim-timeline-item">
+                                    <span class="sim-timeline-label">Tanggal tercapai</span>
+                                    <span class="sim-timeline-value sim-date" id="simMonthlyDate">-</span>
+                                </div>
+                            </div>
+                            <div class="sim-progress-mini">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill sim-progress-animated" id="simMonthlyProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sim-result-card" id="simCombinedResult" style="display:none;">
+                    <div class="sim-result-header gradient-combined">
+                        <div class="sim-result-emoji">🚀</div>
+                        <h4>Gabungan Semua Frekuensi</h4>
+                    </div>
+                    <div class="sim-result-body">
+                        <div class="sim-result-amount" id="simCombinedAmount">Rp 0 / bulan total</div>
+                        <div class="sim-result-timeline">
+                            <div class="sim-timeline-item">
+                                <span class="sim-timeline-label">Tercapai dalam</span>
+                                <span class="sim-timeline-value" id="simCombinedDays">-</span>
+                            </div>
+                            <div class="sim-timeline-item">
+                                <span class="sim-timeline-label">Setara</span>
+                                <span class="sim-timeline-value" id="simCombinedMonths">-</span>
+                            </div>
+                            <div class="sim-timeline-item">
+                                <span class="sim-timeline-label">Tanggal tercapai</span>
+                                <span class="sim-timeline-value sim-date" id="simCombinedDate">-</span>
+                            </div>
+                        </div>
+                        <div class="sim-progress-mini">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill sim-progress-animated" id="simCombinedProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card tips-card sim-tips">
+                    <h3>💡 Tips Menabung</h3>
+                    <ul class="tips-list" id="simTips">
+                        <li>Konsistensi adalah kunci! Menabung sedikit tapi rutin lebih baik daripada besar tapi jarang.</li>
+                        <li>Gunakan fitur Auto Save agar tabunganmu otomatis bertambah.</li>
+                        <li>Tetapkan target realistis dan naikkan jumlah nabung secara bertahap.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="simEmptyState" class="card">
+                <div class="empty-state">
+                    <div class="empty-icon">🧮</div>
+                    <h3>Mulai Simulasi</h3>
+                    <p>Masukkan target tabungan dan nominal menabungmu untuk melihat hasilnya.</p>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -182,12 +393,174 @@
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
     <script>
+        // Mobile sidebar toggle
+        (function() {
+            const toggle = document.getElementById('mobileToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.classList.add('sidebar-open');
+                toggle.textContent = '✕';
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+                toggle.textContent = '☰';
+            }
+
+            toggle.addEventListener('click', function() {
+                sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+            });
+
+            overlay.addEventListener('click', closeSidebar);
+
+            sidebar.querySelectorAll('.nav-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) closeSidebar();
+                });
+            });
+        })();
+
         (async function() {
             const isLoggedIn = await checkAuth();
             if (isLoggedIn) {
                 loadSavingsPage();
             }
         })();
+
+        // ==================== SIMULATION (INLINE) ====================
+
+        function toggleSimulation() {
+            const section = document.getElementById('simSection');
+            const btn = document.getElementById('simToggleBtn');
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                btn.textContent = '✕ Tutup Simulasi';
+                btn.classList.add('sim-toggle-open');
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                section.classList.add('hidden');
+                btn.textContent = '🧮 Buka Simulasi Menabung';
+                btn.classList.remove('sim-toggle-open');
+            }
+        }
+
+        function formatRp(num) {
+            if (num === null || num === undefined || isNaN(num)) return '0';
+            return Number(Math.round(num)).toLocaleString('id-ID');
+        }
+
+        function addDaysToDate(days) {
+            const d = new Date();
+            d.setDate(d.getDate() + Math.ceil(days));
+            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function formatDuration(totalDays) {
+            const years = Math.floor(totalDays / 365);
+            const months = Math.floor((totalDays % 365) / 30);
+            const days = Math.ceil(totalDays % 30);
+            let parts = [];
+            if (years > 0) parts.push(`${years} tahun`);
+            if (months > 0) parts.push(`${months} bulan`);
+            if (days > 0 && years === 0) parts.push(`${days} hari`);
+            return parts.join(' ') || '0 hari';
+        }
+
+        function runSimulation() {
+            const target = parseFloat(document.getElementById('simTarget').value) || 0;
+            const daily = parseFloat(document.getElementById('simDaily').value) || 0;
+            const weekly = parseFloat(document.getElementById('simWeekly').value) || 0;
+            const monthly = parseFloat(document.getElementById('simMonthly').value) || 0;
+
+            const resultsSection = document.getElementById('simResults');
+            const emptyState = document.getElementById('simEmptyState');
+
+            if (target <= 0 || (daily <= 0 && weekly <= 0 && monthly <= 0)) {
+                resultsSection.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            resultsSection.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            const dailyTotal = daily + (weekly / 7) + (monthly / 30);
+            const monthlyEquivalent = (daily * 30) + (weekly * 4.33) + monthly;
+
+            document.getElementById('simTotalPerMonth').textContent = `Rp ${formatRp(monthlyEquivalent)} / bulan`;
+
+            let breakdownParts = [];
+            if (daily > 0) breakdownParts.push(`Harian: Rp ${formatRp(daily)}`);
+            if (weekly > 0) breakdownParts.push(`Mingguan: Rp ${formatRp(weekly)}`);
+            if (monthly > 0) breakdownParts.push(`Bulanan: Rp ${formatRp(monthly)}`);
+            document.getElementById('simTotalBreakdown').textContent = breakdownParts.join('  •  ');
+
+            // Daily
+            const dailyCard = document.getElementById('simDailyResult');
+            if (daily > 0) {
+                dailyCard.style.display = '';
+                const daysNeeded = Math.ceil(target / daily);
+                document.getElementById('simDailyAmount').textContent = `Rp ${formatRp(daily)} / hari`;
+                document.getElementById('simDailyDays').textContent = `${daysNeeded.toLocaleString('id-ID')} hari`;
+                document.getElementById('simDailyMonths').textContent = formatDuration(daysNeeded);
+                document.getElementById('simDailyDate').textContent = addDaysToDate(daysNeeded);
+                animateProgress('simDailyProgress', Math.min(100, (30 / daysNeeded) * 100));
+            } else { dailyCard.style.display = 'none'; }
+
+            // Weekly
+            const weeklyCard = document.getElementById('simWeeklyResult');
+            if (weekly > 0) {
+                weeklyCard.style.display = '';
+                const weeksNeeded = Math.ceil(target / weekly);
+                const daysFromWeeks = weeksNeeded * 7;
+                document.getElementById('simWeeklyAmount').textContent = `Rp ${formatRp(weekly)} / minggu`;
+                document.getElementById('simWeeklyWeeks').textContent = `${weeksNeeded.toLocaleString('id-ID')} minggu`;
+                document.getElementById('simWeeklyMonths').textContent = formatDuration(daysFromWeeks);
+                document.getElementById('simWeeklyDate').textContent = addDaysToDate(daysFromWeeks);
+                animateProgress('simWeeklyProgress', Math.min(100, (30 / daysFromWeeks) * 100));
+            } else { weeklyCard.style.display = 'none'; }
+
+            // Monthly
+            const monthlyCard = document.getElementById('simMonthlyResult');
+            if (monthly > 0) {
+                monthlyCard.style.display = '';
+                const monthsNeeded = Math.ceil(target / monthly);
+                const daysFromMonths = monthsNeeded * 30;
+                document.getElementById('simMonthlyAmount').textContent = `Rp ${formatRp(monthly)} / bulan`;
+                document.getElementById('simMonthlyMonthsCount').textContent = `${monthsNeeded.toLocaleString('id-ID')} bulan`;
+                document.getElementById('simMonthlyYears').textContent = formatDuration(daysFromMonths);
+                document.getElementById('simMonthlyDate').textContent = addDaysToDate(daysFromMonths);
+                animateProgress('simMonthlyProgress', Math.min(100, (30 / daysFromMonths) * 100));
+            } else { monthlyCard.style.display = 'none'; }
+
+            // Combined
+            const combinedCard = document.getElementById('simCombinedResult');
+            const activeCount = [daily, weekly, monthly].filter(v => v > 0).length;
+            if (activeCount >= 2 && dailyTotal > 0) {
+                combinedCard.style.display = '';
+                const combinedDays = Math.ceil(target / dailyTotal);
+                document.getElementById('simCombinedAmount').textContent = `Rp ${formatRp(monthlyEquivalent)} / bulan total`;
+                document.getElementById('simCombinedDays').textContent = `${combinedDays.toLocaleString('id-ID')} hari`;
+                document.getElementById('simCombinedMonths').textContent = formatDuration(combinedDays);
+                document.getElementById('simCombinedDate').textContent = addDaysToDate(combinedDays);
+                animateProgress('simCombinedProgress', Math.min(100, (30 / combinedDays) * 100));
+            } else { combinedCard.style.display = 'none'; }
+        }
+
+        function animateProgress(elementId, targetPercent) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.style.width = '0%';
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => { el.style.width = targetPercent + '%'; });
+            });
+        }
     </script>
 </body>
 
