@@ -306,6 +306,86 @@ function renderSavings() {
         const progress = saving.target > 0 ? (saving.balance / saving.target * 100) : 0;
         const progressClamped = Math.min(progress, 100);
 
+        // --- Estimate time to reach target ---
+        let estimationHtml = '';
+        const remaining = saving.target - saving.balance;
+
+        if (saving.balance >= saving.target) {
+            estimationHtml = `
+                <div class="estimation-badge estimation-success">
+                    <span class="estimation-icon">🎉</span>
+                    <span>Target sudah tercapai! Selamat!</span>
+                </div>`;
+        } else {
+            // Calculate average income per week from transactions
+            const savingTransactions = transactions
+                .filter(t => t.savingId === saving.id && t.type === 'income')
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (savingTransactions.length >= 2) {
+                const firstDate = new Date(savingTransactions[0].date);
+                const lastDate = new Date(savingTransactions[savingTransactions.length - 1].date);
+                const totalIncome = savingTransactions.reduce((sum, t) => sum + t.amount, 0);
+                const daysDiff = Math.max(1, (lastDate - firstDate) / (1000 * 60 * 60 * 24));
+                const avgPerDay = totalIncome / daysDiff;
+                const avgPerWeek = avgPerDay * 7;
+                const avgPerMonth = avgPerDay * 30;
+
+                if (avgPerDay > 0) {
+                    const daysToGoal = Math.ceil(remaining / avgPerDay);
+                    const weeksToGoal = Math.ceil(remaining / avgPerWeek);
+                    const monthsToGoal = (remaining / avgPerMonth).toFixed(1);
+
+                    let timeText = '';
+                    let subText = '';
+                    if (weeksToGoal <= 1) {
+                        timeText = 'Kurang dari 1 minggu lagi!';
+                        subText = `~${daysToGoal} hari`;
+                    } else if (weeksToGoal <= 4) {
+                        timeText = `~${weeksToGoal} minggu lagi`;
+                        subText = `~${daysToGoal} hari`;
+                    } else if (weeksToGoal <= 52) {
+                        timeText = `~${weeksToGoal} minggu lagi`;
+                        subText = `(~${monthsToGoal} bulan)`;
+                    } else {
+                        const years = (weeksToGoal / 52).toFixed(1);
+                        timeText = `~${monthsToGoal} bulan lagi`;
+                        subText = `(~${years} tahun)`;
+                    }
+
+                    const targetDate = new Date();
+                    targetDate.setDate(targetDate.getDate() + daysToGoal);
+                    const dateStr = targetDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+
+                    estimationHtml = `
+                        <div class="estimation-badge estimation-active">
+                            <div class="estimation-main">
+                                <span class="estimation-icon">⏱️</span>
+                                <div>
+                                    <div class="estimation-time">${timeText}</div>
+                                    <div class="estimation-sub">Tercapai ${subText} • 📅 Est. ${dateStr}</div>
+                                </div>
+                            </div>
+                            <div class="estimation-rate">
+                                Rata-rata: Rp ${formatNumber(Math.round(avgPerWeek))}/minggu
+                            </div>
+                        </div>`;
+                }
+            } else if (savingTransactions.length === 1) {
+                estimationHtml = `
+                    <div class="estimation-badge estimation-new">
+                        <span class="estimation-icon">💡</span>
+                        <span>Tambah tabungan lagi untuk melihat estimasi waktu</span>
+                    </div>`;
+            } else {
+                estimationHtml = `
+                    <div class="estimation-badge estimation-new">
+                        <span class="estimation-icon">🚀</span>
+                        <span>Mulai menabung untuk melihat estimasi waktu</span>
+                    </div>`;
+            }
+        }
+
         return `
             <div class="saving-card">
                 <div class="saving-header">
@@ -323,6 +403,8 @@ function renderSavings() {
                         <div class="progress-bar-fill" style="width: ${progressClamped}%"></div>
                     </div>
                 </div>
+
+                ${estimationHtml}
                 
                 <div class="saving-stats">
                     <div class="saving-stat">
