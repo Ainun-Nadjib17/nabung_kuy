@@ -34,6 +34,10 @@
                 <span class="nav-icon"></span>
                 <span class="nav-label">Ringkasan</span>
             </a>
+            <a href="simulasi.html" class="nav-item">
+                <span class="nav-icon">🧮</span>
+                <span class="nav-label">Simulasi</span>
+            </a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-info">
@@ -45,36 +49,40 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <header class="page-header">
-            <h1>🏠 Beranda</h1>
-            <p class="greeting" id="greeting">Selamat datang!</p>
+        <!-- Hero Header -->
+        <header class="page-header dash-hero">
+            <div class="dash-hero-text">
+                <h1>👋 <span id="greeting">Selamat datang!</span></h1>
+                <p class="dash-hero-sub">Pantau progress tabunganmu hari ini</p>
+            </div>
+            <div class="dash-hero-date" id="dashDate"></div>
         </header>
 
         <!-- Stats Cards -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon"></div>
+            <div class="stat-card stat-gradient-1">
+                <div class="stat-icon">💰</div>
                 <div class="stat-info">
                     <div class="stat-value" id="totalBalance">Rp 0</div>
                     <div class="stat-label">Total Tabungan</div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"></div>
+            <div class="stat-card stat-gradient-2">
+                <div class="stat-icon">🎯</div>
                 <div class="stat-info">
                     <div class="stat-value" id="totalGoals">0</div>
                     <div class="stat-label">Jumlah Target</div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"></div>
+            <div class="stat-card stat-gradient-3">
+                <div class="stat-icon">📈</div>
                 <div class="stat-info">
                     <div class="stat-value" id="progressRate">0%</div>
                     <div class="stat-label">Progress Rata-rata</div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon"></div>
+            <div class="stat-card stat-gradient-4">
+                <div class="stat-icon">🔥</div>
                 <div class="stat-info">
                     <div class="stat-value" id="recentTransactions">0</div>
                     <div class="stat-label">Transaksi 7 Hari</div>
@@ -84,32 +92,46 @@
 
         <!-- Quick Actions -->
         <div class="card">
-            <h3>Aksi Cepat</h3>
-            <div class="quick-actions">
+            <h3>⚡ Aksi Cepat</h3>
+            <div class="quick-actions dash-quick-actions">
                 <a href="tambah-tabungan.html" class="quick-action">
-                    <div class="quick-icon"></div>
+                    <div class="quick-icon">➕</div>
                     <div class="quick-label">Tabungan Baru</div>
                 </a>
                 <a href="tabungan-saya.html" class="quick-action">
-                    <div class="quick-icon"></div>
+                    <div class="quick-icon">💳</div>
                     <div class="quick-label">Tambah Saldo</div>
                 </a>
                 <a href="ringkasan.html" class="quick-action">
-                    <div class="quick-icon"></div>
+                    <div class="quick-icon">📊</div>
                     <div class="quick-label">Lihat Grafik</div>
+                </a>
+                <a href="simulasi.html" class="quick-action">
+                    <div class="quick-icon">🧮</div>
+                    <div class="quick-label">Simulasi</div>
                 </a>
             </div>
         </div>
 
         <!-- Recent Savings -->
         <div class="card">
-            <h3>Tabungan Terbaru</h3>
+            <h3>📋 Tabungan Terbaru</h3>
             <div id="recentSavingsList">
                 <div class="empty-state">
                     <div class="empty-icon">📭</div>
                     <p>Belum ada tabungan. <a href="tambah-tabungan.html">Buat sekarang!</a></p>
                 </div>
             </div>
+        </div>
+
+        <!-- Motivational Tips -->
+        <div class="card tips-card dash-tips">
+            <h3>💡 Tips Hari Ini</h3>
+            <ul class="tips-list" id="dashTips">
+                <li>Menabung Rp 10.000/hari = Rp 3.650.000/tahun 🎯</li>
+                <li>Aktifkan Auto Save agar tabunganmu bertambah otomatis</li>
+                <li>Kecil-kecil lama-lama jadi bukit — yang penting konsisten!</li>
+            </ul>
         </div>
     </main>
 
@@ -155,6 +177,15 @@
             const isLoggedIn = await checkAuth();
             if (isLoggedIn) {
                 loadDashboard();
+
+                // Set today's date
+                const dateEl = document.getElementById('dashDate');
+                if (dateEl) {
+                    const now = new Date();
+                    dateEl.textContent = now.toLocaleDateString('id-ID', {
+                        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                    });
+                }
             }
         })();
     </script>
