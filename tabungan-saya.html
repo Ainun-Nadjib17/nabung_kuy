@@ -9,8 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
-    
-
 <body>
     <!-- Mobile Toggle & Overlay -->
     <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
@@ -54,9 +52,6 @@
         <header class="page-header">
             <h1>📋 Tabungan Saya</h1>
             <p class="subtitle">Kelola dan pantau semua tabunganmu</p>
-             <p style="text-align:center; margin:20px 0; font-size:13px; opacity:0.7;">
-    ⬇️ Untuk membuka simulasi menabung, silakan gulir ke bawah
-</p>
         </header>
 
         <div id="savingsContainer" class="savings-grid">
@@ -69,7 +64,6 @@
             <p>Yuk buat tabungan pertamamu sekarang!</p>
             <a href="tambah-tabungan.html" class="btn btn-primary">Buat Tabungan</a>
         </div>
-
 
         <!-- Simulation Section (Collapsible) -->
         <div class="sim-toggle-section">
@@ -274,6 +268,26 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal: Edit Nama Tabungan -->
+    <div id="editSavingModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>✏️ Edit Nama Tabungan</h3>
+                <button class="btn-close" onclick="closeModal('editSavingModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nama Tabungan Baru</label>
+                    <input type="text" id="editSavingNameInput" placeholder="Contoh: Beli Laptop" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editSavingModal')">Batal</button>
+                <button class="btn btn-primary" onclick="confirmEditSavingName()">Simpan</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal: Tambah Saldo -->
     <div id="addBalanceModal" class="modal-overlay">
