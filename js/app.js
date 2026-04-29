@@ -361,9 +361,9 @@ function renderSavings() {
                         <div class="estimation-badge estimation-active">
                             <div class="estimation-main">
                                 <span class="estimation-icon">⏱️</span>
-                                <div>
-                                    <div class="estimation-time">${timeText}</div>
-                                    <div class="estimation-sub">Tercapai ${subText} • 📅 Est. ${dateStr}</div>
+                                <div style="width: 100%;">
+                                    <div class="estimation-time countdown-timer" data-target="${targetDate.toISOString()}" style="font-family: monospace; font-size: 16px; font-weight: bold; background: rgba(79, 70, 229, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-block; color: var(--primary);">Menghitung...</div>
+                                    <div class="estimation-sub" style="margin-top: 6px;">Tercapai ${subText} • 📅 Est. ${dateStr}</div>
                                 </div>
                             </div>
                             <div class="estimation-rate">
@@ -389,7 +389,10 @@ function renderSavings() {
         return `
             <div class="saving-card">
                 <div class="saving-header">
-                    <h4>${escapeHtml(saving.name)}</h4>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <h4 style="margin: 0;">${escapeHtml(saving.name)}</h4>
+                        <button onclick="openEditSavingName('${saving.id}')" style="background: none; border: none; cursor: pointer; font-size: 14px; opacity: 0.6; transition: 0.3s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'" title="Edit Nama">✏️</button>
+                    </div>
                     ${saving.balance >= saving.target ? '<span class="badge badge-success">🎉 Tercapai!</span>' : ''}
                 </div>
                 <p class="saving-purpose">🎯 ${escapeHtml(saving.purpose)}</p>
@@ -440,6 +443,68 @@ function renderSavings() {
         `;
     }).join('');
 }
+
+// ==================== EDIT SAVING NAME ====================
+
+function openEditSavingName(savingId) {
+    currentSavingId = savingId;
+    loadData();
+    const saving = savings.find(s => s.id === savingId);
+    if (!saving) return;
+    
+    document.getElementById('editSavingNameInput').value = saving.name;
+    document.getElementById('editSavingModal').classList.add('active');
+}
+
+function confirmEditSavingName() {
+    const newName = document.getElementById('editSavingNameInput').value.trim();
+    if (!newName) {
+        alert('Nama tabungan tidak boleh kosong!');
+        return;
+    }
+
+    loadData();
+    const saving = savings.find(s => s.id === currentSavingId);
+    if (!saving) return;
+
+    saving.name = newName;
+    
+    // Update name in transactions as well
+    transactions.forEach(t => {
+        if (t.savingId === currentSavingId) {
+            t.savingName = newName;
+        }
+    });
+
+    saveData();
+    closeModal('editSavingModal');
+    renderSavings();
+    alert('Nama tabungan berhasil diperbarui! ✅');
+}
+
+// ==================== COUNTDOWN TIMER ====================
+setInterval(() => {
+    document.querySelectorAll('.countdown-timer').forEach(el => {
+        const targetStr = el.getAttribute('data-target');
+        if (!targetStr) return;
+        
+        const target = new Date(targetStr).getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+        
+        if (diff <= 0) {
+            el.innerHTML = "Tercapai hari ini!";
+            return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        el.innerHTML = `${days}h ${String(hours).padStart(2, '0')}j ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}d`;
+    });
+}, 1000);
 
 // ==================== TRANSACTIONS ====================
 
