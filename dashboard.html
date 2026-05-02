@@ -15,120 +15,354 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo"> TabungKu</div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item active">
-                <span class="nav-icon"></span>
-                <span class="nav-label">Beranda</span>
+    <aside class="sidebar modern-sidebar" id="sidebar">
+        <div class="sidebar-logo modern-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+            </svg>
+            TabungKu
+        </div>
+        <nav class="sidebar-nav modern-nav">
+            <a href="dashboard.html" class="nav-item modern-nav-item active">
+                <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg></span>
+                <span class="nav-label">Dashboard</span>
             </a>
-            <a href="tambah-tabungan.html" class="nav-item">
-                <span class="nav-icon"></span>
+            <a href="tambah-tabungan.html" class="nav-item modern-nav-item">
+                <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg></span>
                 <span class="nav-label">Tambah Tabungan</span>
             </a>
-            <a href="tabungan-saya.html" class="nav-item">
-                <span class="nav-icon"></span>
+            <a href="tabungan-saya.html" class="nav-item modern-nav-item">
+                <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+                    </svg></span>
                 <span class="nav-label">Tabungan Saya</span>
             </a>
-            <a href="ringkasan.html" class="nav-item">
-                <span class="nav-icon"></span>
+            <a href="ringkasan.html" class="nav-item modern-nav-item">
+                <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg></span>
                 <span class="nav-label">Ringkasan</span>
             </a>
-          
+            <a href="simulasi.html" class="nav-item modern-nav-item">
+                <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="6" height="6"></rect>
+                        <line x1="9" y1="1" x2="9" y2="4"></line>
+                        <line x1="15" y1="1" x2="15" y2="4"></line>
+                        <line x1="9" y1="20" x2="9" y2="23"></line>
+                        <line x1="15" y1="20" x2="15" y2="23"></line>
+                        <line x1="20" y1="9" x2="23" y2="9"></line>
+                        <line x1="20" y1="14" x2="23" y2="14"></line>
+                        <line x1="1" y1="9" x2="4" y2="9"></line>
+                        <line x1="1" y1="14" x2="4" y2="14"></line>
+                    </svg></span>
+                <span class="nav-label">Simulasi</span>
+            </a>
         </nav>
-        <div class="sidebar-footer">
-            <div class="user-info">
-                <span id="userName">User</span>
+        <div class="sidebar-footer modern-sidebar-footer">
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Profile"
+                    class="profile-pic">
+                <div class="user-info">
+                    <span id="userName" class="user-name-text">User</span>
+                </div>
+                <button class="btn-logout-icon" onclick="logout()" title="Logout">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
             </div>
-            <button class="btn btn-logout" onclick="logout()">🚪 Keluar</button>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content">
-        <!-- Hero Header -->
-        <header class="page-header dash-hero">
-            <div class="dash-hero-text">
-                <h1>👋 <span id="greeting">Selamat datang!</span></h1>
-                <p class="dash-hero-sub">Pantau progress tabunganmu hari ini</p>
+    <main class="main-content modern-main">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="search-bar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" placeholder="Search anything...">
             </div>
-            <div class="dash-hero-date" id="dashDate"></div>
+            <div class="top-nav-actions">
+                <button class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg></button>
+                <button class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg></button>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <header class="page-header modern-header">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+                <p id="greeting" class="greeting-text">Selamat datang!</p>
+            </div>
+            <div class="header-right">
+                <div class="date-picker-mock">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span id="dashDate">Jan 1, 2025</span>
+                </div>
+                <button class="btn-export">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export
+                </button>
+            </div>
         </header>
 
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card stat-gradient-1">
-                <div class="stat-icon">💰</div>
-                <div class="stat-info">
+        <!-- Stats Grid (Preserving Logic IDs) -->
+        <div class="stats-grid modern-stats">
+            <div class="stat-card modern-stat-card">
+                <div class="stat-top">
+                    <span class="stat-title">Total Tabungan</span>
+                    <span class="stat-icon-small text-blue bg-blue-light"><svg width="16" height="16"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg></span>
+                </div>
+                <div class="stat-bottom">
                     <div class="stat-value" id="totalBalance">Rp 0</div>
-                    <div class="stat-label">Total Tabungan</div>
+                    <div class="stat-trend trend-up">↑ 15.8%</div>
                 </div>
             </div>
-            <div class="stat-card stat-gradient-2">
-                <div class="stat-icon">🎯</div>
-                <div class="stat-info">
+            <div class="stat-card modern-stat-card">
+                <div class="stat-top">
+                    <span class="stat-title">Jumlah Target</span>
+                    <span class="stat-icon-small text-indigo bg-blue-light"><svg width="16" height="16"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg></span>
+                </div>
+                <div class="stat-bottom">
                     <div class="stat-value" id="totalGoals">0</div>
-                    <div class="stat-label">Jumlah Target</div>
+                    <div class="stat-trend trend-up">↑ 8.4%</div>
                 </div>
             </div>
-            <div class="stat-card stat-gradient-3">
-                <div class="stat-icon">📈</div>
-                <div class="stat-info">
+            <div class="stat-card modern-stat-card">
+                <div class="stat-top">
+                    <span class="stat-title">Progress Rata-rata</span>
+                    <span class="stat-icon-small text-green bg-green-light"><svg width="16" height="16"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg></span>
+                </div>
+                <div class="stat-bottom">
                     <div class="stat-value" id="progressRate">0%</div>
-                    <div class="stat-label">Progress Rata-rata</div>
+                    <div class="stat-trend trend-down">↓ 1.5%</div>
                 </div>
             </div>
-            <div class="stat-card stat-gradient-4">
-                <div class="stat-icon">🔥</div>
-                <div class="stat-info">
+            <div class="stat-card modern-stat-card">
+                <div class="stat-top">
+                    <span class="stat-title">Transaksi 7 Hari</span>
+                    <span class="stat-icon-small text-orange bg-orange-light"><svg width="16" height="16"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 16 12 14 15 10 9 8 12 2 12"></polyline>
+                        </svg></span>
+                </div>
+                <div class="stat-bottom">
                     <div class="stat-value" id="recentTransactions">0</div>
-                    <div class="stat-label">Transaksi 7 Hari</div>
+                    <div class="stat-trend trend-up">↑ 4.4%</div>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="card">
-            <h3>⚡ Aksi Cepat</h3>
-            <div class="quick-actions dash-quick-actions">
-                <a href="tambah-tabungan.html" class="quick-action">
-                    <div class="quick-icon">➕</div>
-                    <div class="quick-label">Tabungan Baru</div>
-                </a>
-                <a href="tabungan-saya.html" class="quick-action">
-                    <div class="quick-icon">💳</div>
-                    <div class="quick-label">Tambah Saldo</div>
-                </a>
-                <a href="ringkasan.html" class="quick-action">
-                    <div class="quick-icon">📊</div>
-                    <div class="quick-label">Lihat Grafik</div>
-                </a>
-                <a href="tabungan-saya.html" class="quick-action">
-                    <div class="quick-icon">🧮</div>
-                    <div class="quick-label">Simulasi</div>
-                </a>
-            </div>
-        </div>
+        <!-- Dashboard Body Layout -->
+        <div class="dashboard-grid">
+            <!-- Left Column: Actions & Recent -->
+            <div class="dash-left">
+                <!-- Quick Actions -->
+                <div class="modern-card">
+                    <div class="card-header">
+                        <h3>Aksi Cepat</h3>
+                        <button class="btn-more"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg></button>
+                    </div>
+                    <div class="quick-actions shopeers-quick-actions">
+                        <a href="tambah-tabungan.html" class="sq-action">
+                            <div class="sq-icon text-blue bg-blue-light"><svg width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg></div>
+                            <div class="sq-label">Tabungan Baru</div>
+                        </a>
+                        <a href="tabungan-saya.html" class="sq-action">
+                            <div class="sq-icon text-green bg-green-light"><svg width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg></div>
+                            <div class="sq-label">Tambah Saldo</div>
+                        </a>
+                        <a href="ringkasan.html" class="sq-action">
+                            <div class="sq-icon text-purple bg-purple-light"><svg width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg></div>
+                            <div class="sq-label">Lihat Grafik</div>
+                        </a>
+                        <a href="simulasi.html" class="sq-action">
+                            <div class="sq-icon text-orange bg-orange-light"><svg width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                                    <rect x="9" y="9" width="6" height="6"></rect>
+                                    <line x1="9" y1="1" x2="9" y2="4"></line>
+                                    <line x1="15" y1="1" x2="15" y2="4"></line>
+                                    <line x1="9" y1="20" x2="9" y2="23"></line>
+                                    <line x1="15" y1="20" x2="15" y2="23"></line>
+                                    <line x1="20" y1="9" x2="23" y2="9"></line>
+                                    <line x1="20" y1="14" x2="23" y2="14"></line>
+                                    <line x1="1" y1="9" x2="4" y2="9"></line>
+                                    <line x1="1" y1="14" x2="4" y2="14"></line>
+                                </svg></div>
+                            <div class="sq-label">Simulasi</div>
+                        </a>
+                    </div>
+                </div>
 
-        <!-- Recent Savings -->
-        <div class="card">
-            <h3>📋 Tabungan Terbaru</h3>
-            <div id="recentSavingsList">
-                <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <p>Belum ada tabungan. <a href="tambah-tabungan.html">Buat sekarang!</a></p>
+                <!-- Recent Savings -->
+                <div class="modern-card recent-card">
+                    <div class="card-header">
+                        <h3>Tabungan Terbaru</h3>
+                        <button class="btn-more"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg></button>
+                    </div>
+                    <div id="recentSavingsList" class="shopeers-list">
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>Belum ada tabungan. <a href="tambah-tabungan.html" class="text-blue">Buat sekarang!</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Motivational Tips -->
-        <div class="card tips-card dash-tips">
-            <h3>💡 Tips Hari Ini</h3>
-            <ul class="tips-list" id="dashTips">
-                <li>Menabung Rp 10.000/hari = Rp 3.650.000/tahun 🎯</li>
-                <li>Aktifkan Auto Save agar tabunganmu bertambah otomatis</li>
-                <li>Kecil-kecil lama-lama jadi bukit — yang penting konsisten!</li>
-            </ul>
+            <!-- Right Column: Tips & AI Assistant -->
+            <div class="dash-right">
+                <!-- Motivasi / Tips -->
+                <div class="modern-card tips-card">
+                    <div class="card-header">
+                        <h3>Tips Hari Ini</h3>
+                        <button class="btn-more"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg></button>
+                    </div>
+                    <ul class="tips-list shopeers-tips" id="dashTips">
+                        <li>
+                            <div class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg></div>
+                            <span>Menabung Rp 10.000/hari = Rp 3.650.000/tahun 🎯</span>
+                        </li>
+                        <li>
+                            <div class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg></div>
+                            <span>Aktifkan Auto Save agar tabunganmu bertambah otomatis</span>
+                        </li>
+                        <li>
+                            <div class="tip-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg></div>
+                            <span>Kecil-kecil lama-lama jadi bukit — konsisten kuncinya!</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Fake AI Assistant (Visual match) -->
+                <div class="modern-card ai-assistant-card">
+                    <div class="card-header">
+                        <h3>AI Assistant</h3>
+                        <button class="btn-expand"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                            </svg></button>
+                    </div>
+                    <div class="ai-orb-container">
+                        <div class="ai-orb" id="aiOrb"></div>
+                    </div>
+                    <div id="aiResponse"
+                        style="font-size: 13px; color: #475569; margin-bottom: 16px; min-height: 40px; display: none; padding: 0 12px;">
+                    </div>
+                    <div class="ai-input">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <input type="text" id="aiInput" placeholder="Tanya soal menabung...">
+                        <button class="ai-send" id="aiSendBtn"><svg width="14" height="14" viewBox="0 0 24 24"
+                                fill="white" stroke="white" stroke-width="2">
+                                <line x1="12" y1="19" x2="12" y2="5"></line>
+                                <polyline points="5 12 12 5 19 12"></polyline>
+                            </svg></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -137,7 +371,7 @@
     <script src="js/app.js"></script>
     <script>
         // Mobile sidebar toggle
-        (function() {
+        (function () {
             const toggle = document.getElementById('mobileToggle');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -156,21 +390,21 @@
                 toggle.textContent = '☰';
             }
 
-            toggle.addEventListener('click', function() {
+            toggle.addEventListener('click', function () {
                 sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
             });
 
             overlay.addEventListener('click', closeSidebar);
 
             // Close sidebar when clicking a nav item on mobile
-            sidebar.querySelectorAll('.nav-item').forEach(function(item) {
-                item.addEventListener('click', function() {
+            sidebar.querySelectorAll('.nav-item').forEach(function (item) {
+                item.addEventListener('click', function () {
                     if (window.innerWidth <= 768) closeSidebar();
                 });
             });
         })();
 
-        (async function() {
+        (async function () {
             const isLoggedIn = await checkAuth();
             if (isLoggedIn) {
                 loadDashboard();
@@ -179,12 +413,76 @@
                 const dateEl = document.getElementById('dashDate');
                 if (dateEl) {
                     const now = new Date();
-                    dateEl.textContent = now.toLocaleDateString('id-ID', {
-                        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                    dateEl.textContent = now.toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric', year: 'numeric'
                     });
                 }
             }
         })();
+
+        // AI Assistant Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const aiInput = document.getElementById('aiInput');
+            const aiSendBtn = document.getElementById('aiSendBtn');
+            const aiResponse = document.getElementById('aiResponse');
+            const aiOrb = document.getElementById('aiOrb');
+
+            async function handleAiChat() {
+                const question = aiInput.value.trim();
+                if (!question) return;
+
+                // Langsung gunakan API Key yang dimasukkan pengguna
+                const apiKey = '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';
+
+                // Loading state
+                aiInput.value = '';
+                aiResponse.style.display = 'block';
+                aiResponse.innerHTML = '<em>Memproses dengan Meta AI...</em>';
+                aiOrb.style.animationDuration = '0.5s';
+
+                try {
+                    const response = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'llama-3.1-8b-instant',
+                            messages: [
+                                { role: 'system', content: 'Kamu adalah asisten keuangan pribadi bernama AI TabungKu. Jawab dengan singkat (1-2 kalimat), ramah, dan memotivasi menggunakan bahasa Indonesia.' },
+                                { role: 'user', content: question }
+                            ],
+                            max_tokens: 150
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+
+                    const aiText = data.choices[0].message.content;
+                    // Provide a markdown-like bold formatting clean up if needed, but innerHTML handles basic formatting
+                    aiResponse.innerHTML = `<strong>Meta AI:</strong> ${aiText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}`;
+                } catch (error) {
+                    console.error("Meta AI Error:", error);
+                    aiResponse.innerHTML = `<strong>Error:</strong> Gagal terhubung ke AI. Pastikan API Key valid atau koneksi internet stabil.`;
+                } finally {
+                    aiOrb.style.animationDuration = '3s';
+                }
+            }
+
+            if (aiSendBtn) {
+                aiSendBtn.addEventListener('click', handleAiChat);
+            }
+            if (aiInput) {
+                aiInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') handleAiChat();
+                });
+            }
+        });
     </script>
 
 </body>
