@@ -2776,25 +2776,45 @@ body {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+    .modern-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 @media (max-width: 768px) {
-    .modern-stats {
-        grid-template-columns: 1fr 1fr;
+    .modern-main {
+        padding-top: 70px; /* Beri ruang untuk tombol menu mobile */
     }
-    .shopeers-quick-actions {
-        grid-template-columns: 1fr;
+    .top-nav {
+        margin-bottom: 20px;
+        justify-content: flex-end; /* Geser icon ke kanan agar tidak tabrakan dengan tombol menu */
     }
     .search-bar {
         display: none;
+    }
+    .shopeers-quick-actions {
+        grid-template-columns: repeat(2, 1fr); /* 2x2 grid lebih rapi di HP */
+    }
+    .modern-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 @media (max-width: 480px) {
     .modern-stats {
         grid-template-columns: 1fr;
     }
-    .modern-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
+    .shopeers-quick-actions {
+        gap: 12px;
+    }
+    .sq-action {
+        padding: 12px 8px;
+    }
+    .sq-label {
+        font-size: 12px;
     }
 }
