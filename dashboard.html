@@ -432,18 +432,18 @@
                 if (!question) return;
 
                 let apiKey = localStorage.getItem('meta_ai_api_key');
-                if (!apiKey) {
-                    // Trik memecah string agar API Key tidak diblokir oleh GitHub Secret Scanner
-                    const defaultKey = "gsk_HCH2DQ" + "1TWKUZv4L4" + "rU84WGdyb3" + "FYturB8qwg" + "gCThB0SyrNrE93Ap";
-                    apiKey = prompt('Masukkan API Key Anda untuk menggunakan Meta AI (Llama 3):', defaultKey);
-                    if (apiKey) {
-                        localStorage.setItem('meta_ai_api_key', apiKey);
-                    } else {
-                        aiResponse.style.display = 'block';
-                        aiResponse.innerHTML = '<em style="color:#ef4444;">API Key dibutuhkan untuk fitur ini.</em>';
-                        return;
-                    }
-                }
+
+if (!apiKey) {
+    apiKey = prompt('Masukkan API Key anda bisa di dapatkan di AI google studio:');
+
+    if (apiKey) {
+        localStorage.setItem('meta_ai_api_key', apiKey);
+    } else {
+        aiResponse.style.display = 'block';
+        aiResponse.innerHTML = '<em style="color:#ef4444;">API Key dibutuhkan untuk fitur ini.</em>';
+        return;
+    }
+}
 
                 // Loading state
                 aiInput.value = '';
