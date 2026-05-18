@@ -421,76 +421,78 @@
         })();
 
         // AI Assistant Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const aiInput = document.getElementById('aiInput');
-            const aiSendBtn = document.getElementById('aiSendBtn');
-            const aiResponse = document.getElementById('aiResponse');
-            const aiOrb = document.getElementById('aiOrb');
-
-            async function handleAiChat() {
-                const question = aiInput.value.trim();
-                if (!question) return;
-
-                let apiKey = localStorage.getItem('meta_ai_api_key');
-
-if (!apiKey) {
-    apiKey = prompt('Masukkan API Key anda bisa di dapatkan di AI google studio:');
-
-    if (apiKey) {
-        localStorage.setItem('meta_ai_api_key', apiKey);
-    } else {
+        <script>
 document.addEventListener('DOMContentLoaded', () => {
+
     const aiInput = document.getElementById('aiInput');
     const aiSendBtn = document.getElementById('aiSendBtn');
     const aiResponse = document.getElementById('aiResponse');
     const aiOrb = document.getElementById('aiOrb');
 
     async function handleAiChat() {
+
         const question = aiInput.value.trim();
 
         if (!question) return;
 
         let apiKey = localStorage.getItem('meta_ai_api_key');
 
+        // Minta API Key jika belum ada
         if (!apiKey) {
+
             apiKey = prompt(
                 'Masukkan API Key Gemini Anda\n\nAmbil di Google AI Studio'
             );
 
             if (apiKey) {
-                localStorage.setItem('meta_ai_api_key', apiKey);
+
+                localStorage.setItem(
+                    'meta_ai_api_key',
+                    apiKey
+                );
+
             } else {
+
                 aiResponse.style.display = 'block';
+
                 aiResponse.innerHTML =
                     '<em style="color:red;">API Key dibutuhkan.</em>';
+
                 return;
             }
         }
 
+        // Loading state
         aiInput.value = '';
 
         aiResponse.style.display = 'block';
-        aiResponse.innerHTML = '<em>AI sedang berpikir...</em>';
+
+        aiResponse.innerHTML =
+            '<em>AI sedang berpikir...</em>';
 
         aiOrb.style.animationDuration = '0.5s';
 
         try {
+
             const response = await fetch(
                 `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
+
                     headers: {
                         'Content-Type': 'application/json'
                     },
+
                     body: JSON.stringify({
                         contents: [
                             {
                                 parts: [
                                     {
                                         text:
-                                            `Kamu adalah AI TabungKu, asisten keuangan pribadi. ` +
-                                            `Jawab singkat, ramah, dan memotivasi.\n\n` +
-                                            `User: ${question}`
+`Kamu adalah AI TabungKu, asisten keuangan pribadi.
+Jawab singkat, ramah, dan memotivasi.
+
+User: ${question}`
                                     }
                                 ]
                             }
@@ -503,10 +505,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log(data);
 
+            // Error API
             if (data.error) {
                 throw new Error(data.error.message);
             }
 
+            // Ambil respon AI
             const aiText =
                 data.candidates?.[0]?.content?.parts?.[0]?.text ||
                 'Tidak ada respon dari AI';
@@ -515,42 +519,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<strong>AI TabungKu:</strong><br>${aiText}`;
 
         } catch (error) {
+
             console.error(error);
 
             aiResponse.innerHTML =
-                `<strong>Error:</strong> ${error.message}
-                <br><br>
-                <a href="#" id="resetKey"
-                style="color:#2563eb;text-decoration:underline;">
-                Reset API Key
-                </a>`;
+                `
+                <strong>Error:</strong>
+                ${error.message}
 
+                <br><br>
+
+                <a href="#"
+                   id="resetKey"
+                   style="color:#2563eb;text-decoration:underline;">
+                   Reset API Key
+                </a>
+                `;
+
+            // Reset API Key
             setTimeout(() => {
+
                 document
                     .getElementById('resetKey')
                     ?.addEventListener('click', (e) => {
+
                         e.preventDefault();
 
-                        localStorage.removeItem('meta_ai_api_key');
+                        localStorage.removeItem(
+                            'meta_ai_api_key'
+                        );
 
                         aiResponse.innerHTML =
                             '<em>API Key berhasil direset.</em>';
                     });
+
             }, 100);
+
         } finally {
+
             aiOrb.style.animationDuration = '3s';
         }
     }
 
-    aiSendBtn.addEventListener('click', handleAiChat);
+    // Tombol kirim
+    aiSendBtn.addEventListener(
+        'click',
+        handleAiChat
+    );
 
-    aiInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleAiChat();
+    // Enter untuk kirim
+    aiInput.addEventListener(
+        'keypress',
+        (e) => {
+
+            if (e.key === 'Enter') {
+                handleAiChat();
+            }
         }
-    });
+    );
+
 });
-    </script>
+</script>
+    
 
 </body>
 
