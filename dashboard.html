@@ -439,85 +439,117 @@ if (!apiKey) {
     if (apiKey) {
         localStorage.setItem('meta_ai_api_key', apiKey);
     } else {
-        aiResponse.style.display = 'block';
-        aiResponse.innerHTML = '<em style="color:#ef4444;">API Key dibutuhkan untuk fitur ini.</em>';
-        return;
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const aiInput = document.getElementById('aiInput');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+    const aiResponse = document.getElementById('aiResponse');
+    const aiOrb = document.getElementById('aiOrb');
 
-                // Loading state
-                aiInput.value = '';
+    async function handleAiChat() {
+        const question = aiInput.value.trim();
+
+        if (!question) return;
+
+        let apiKey = localStorage.getItem('meta_ai_api_key');
+
+        if (!apiKey) {
+            apiKey = prompt(
+                'Masukkan API Key Gemini Anda\n\nAmbil di Google AI Studio'
+            );
+
+            if (apiKey) {
+                localStorage.setItem('meta_ai_api_key', apiKey);
+            } else {
                 aiResponse.style.display = 'block';
-                aiResponse.innerHTML = '<em>Memproses dengan Meta AI...</em>';
-                aiOrb.style.animationDuration = '0.5s';
+                aiResponse.innerHTML =
+                    '<em style="color:red;">API Key dibutuhkan.</em>';
+                return;
+            }
+        }
 
-                try {
-                    const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
-    {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            contents: [
+        aiInput.value = '';
+
+        aiResponse.style.display = 'block';
+        aiResponse.innerHTML = '<em>AI sedang berpikir...</em>';
+
+        aiOrb.style.animationDuration = '0.5s';
+
+        try {
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
                 {
-                    parts: [
-                        {
-                            text: `Kamu adalah AI TabungKu, asisten keuangan pribadi. Jawab singkat, ramah, dan memotivasi.\n\nUser: ${question}`
-                        }
-                    ]
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                parts: [
+                                    {
+                                        text:
+                                            `Kamu adalah AI TabungKu, asisten keuangan pribadi. ` +
+                                            `Jawab singkat, ramah, dan memotivasi.\n\n` +
+                                            `User: ${question}`
+                                    }
+                                ]
+                            }
+                        ]
+                    })
                 }
-            ]
-        })
+            );
+
+            const data = await response.json();
+
+            console.log(data);
+
+            if (data.error) {
+                throw new Error(data.error.message);
+            }
+
+            const aiText =
+                data.candidates?.[0]?.content?.parts?.[0]?.text ||
+                'Tidak ada respon dari AI';
+
+            aiResponse.innerHTML =
+                `<strong>AI TabungKu:</strong><br>${aiText}`;
+
+        } catch (error) {
+            console.error(error);
+
+            aiResponse.innerHTML =
+                `<strong>Error:</strong> ${error.message}
+                <br><br>
+                <a href="#" id="resetKey"
+                style="color:#2563eb;text-decoration:underline;">
+                Reset API Key
+                </a>`;
+
+            setTimeout(() => {
+                document
+                    .getElementById('resetKey')
+                    ?.addEventListener('click', (e) => {
+                        e.preventDefault();
+
+                        localStorage.removeItem('meta_ai_api_key');
+
+                        aiResponse.innerHTML =
+                            '<em>API Key berhasil direset.</em>';
+                    });
+            }, 100);
+        } finally {
+            aiOrb.style.animationDuration = '3s';
+        }
     }
-);
 
-const data = await response.json();
+    aiSendBtn.addEventListener('click', handleAiChat);
 
-if (data.error) {
-    throw new Error(data.error.message);
-}
-
-const aiText = data.candidates[0].content.parts[0].text;
-
-aiResponse.innerHTML =
-    `<strong>AI TabungKu:</strong> ${aiText}`;
-
-                    const data = await response.json();
-
-                    if (data.error) {
-                        throw new Error(data.error.message);
-                    }
-
-                    const aiText = data.choices[0].message.content;
-                    // Provide a markdown-like bold formatting clean up if needed, but innerHTML handles basic formatting
-                    aiResponse.innerHTML = `<strong>Meta AI:</strong> ${aiText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}`;
-                } catch (error) {
-                    console.error("Meta AI Error:", error);
-                    aiResponse.innerHTML = `<strong>Error:</strong> Gagal terhubung ke AI. Pastikan API Key valid. <br><a href="#" id="resetKey" style="color:#2563eb; text-decoration: underline;">Reset API Key</a>`;
-
-                    setTimeout(() => {
-                        document.getElementById('resetKey')?.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            localStorage.removeItem('meta_ai_api_key');
-                            aiResponse.innerHTML = '<em>API Key telah direset. Silakan tanya lagi.</em>';
-                        });
-                    }, 100);
-                } finally {
-                    aiOrb.style.animationDuration = '3s';
-                }
-            }
-
-            if (aiSendBtn) {
-                aiSendBtn.addEventListener('click', handleAiChat);
-            }
-            if (aiInput) {
-                aiInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') handleAiChat();
-                });
-            }
-        });
+    aiInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleAiChat();
+        }
+    });
+});
     </script>
 
 </body>
